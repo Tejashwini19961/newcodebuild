@@ -1,0 +1,24 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+  pre_build:
+    commands:
+      # Verify AWS CLI Version
+      - echo "Verify AWS CLI Version..."
+      - aws --version
+      # Uninstall awscli version 1 (if present)
+      - pip3 uninstall -y awscli
+      # Install awscli version 2
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip awscliv2.zip
+      - aws --version
+  build:
+    commands:
+      # Package CloudFormation template and upload code to S3
+      - aws cloudformation package --template-file lambda_function/cft-lambda-2.yaml --s3-bucket display-ip-pipeline-artifact --output-template-file packaged-template.yml
+
+artifacts:
+  files:
+    - packaged-template.yml

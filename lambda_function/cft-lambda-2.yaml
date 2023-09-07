@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation Template for AWS Lambda function
+
+Resources:
+  MyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: MyLambdaFunction
+      Runtime: python3.10
+      Handler: lambda_function.lambda_function.lambda_handler
+      Role: arn:aws:iam::199370626122:role/service-role/dashboard-lambda-role-u8052qzp
+      Code:
+        S3Bucket: demo-pipeline-source # Replace 'your-s3-bucket-name' with your actual S3 bucket name
+        S3Key: lambda_function.zip    # Replace 'lambda_function.zip' with the name of your ZIP file
+      Timeout: 10
+
+Outputs:
+  LambdaFunctionARN:
+    Value: !GetAtt MyLambdaFunction.Arn
+    Description: ARN of the created Lambda function
